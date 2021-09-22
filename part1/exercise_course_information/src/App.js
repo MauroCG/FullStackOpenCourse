@@ -1,24 +1,71 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+const Header = ({course}) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <h1>{course}</h1>
+  );
+}
+
+
+/*
+const Content = ({lessons, contents}) => {
+  return (
+    lessons.map(lesson => {
+      return (
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          { lesson }: { contents[lessons.indexOf(lesson)] }
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      )
+    })
+  );
+} 
+*/
+const Content = ({lesson, content}) => {
+  return (
+    <p>
+      {lesson}: {content}
+    </p>
+  );
+}
+
+
+const Total = ({exercises}) => {
+  let total = 0
+
+  exercises.map(exercise => {
+    total += exercise
+    return 0
+  })
+
+  return (
+    <p>Number of exercises: {total}</p>
+  );
+}
+
+
+const App = () => {
+  const course = 'Half Stack application development'
+  const part1 = 'Fundamentals of React'
+  const exercises1 = 10
+  const part2 = 'Using props to pass data'
+  const exercises2 = 7
+  const part3 = 'State of a component'
+  const exercises3 = 14
+  //const lessons = [part1, part2, part3]
+  //const contents = [exercises1, exercises2, exercises3]
+
+  return (
+    <>
+      <Header course={course} />
+      {/*
+      <Content 
+        lessons={lessons}
+        contents={contents}  
+      />
+      */}
+      <Content lesson={part1} content={exercises1} />
+      <Content lesson={part2} content={exercises2} />
+      <Content lesson={part3} content={exercises3} />
+      <Total exercises={[exercises1, exercises2, exercises3]} />
+    </>
   );
 }
 
