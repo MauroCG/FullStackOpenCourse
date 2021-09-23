@@ -5,24 +5,25 @@ const Header = ({course}) => {
 }
 
 
-/*
-const Content = ({lessons, contents}) => {
-  return (
-    lessons.map(lesson => {
-      return (
-        <p>
-          { lesson }: { contents[lessons.indexOf(lesson)] }
-        </p>
-      )
-    })
-  );
-} 
-*/
-const Content = ({lesson, content}) => {
+const Part = ({lesson, content}) => {
   return (
     <p>
       {lesson}: {content}
     </p>
+  );
+}
+
+
+const Content = ({lessons, contents}) => {
+  const [ lesson1, lesson2, lesson3 ] = lessons
+  const [ content1, content2, content3 ] = contents
+
+  return (
+    <div>
+      <Part lesson={lesson1} content={content1} />
+      <Part lesson={lesson2} content={content2} />
+      <Part lesson={lesson3} content={content3} />
+    </div>
   );
 }
 
@@ -49,21 +50,16 @@ const App = () => {
   const exercises2 = 7
   const part3 = 'State of a component'
   const exercises3 = 14
-  //const lessons = [part1, part2, part3]
-  //const contents = [exercises1, exercises2, exercises3]
+  const lessons = [part1, part2, part3]
+  const contents = [exercises1, exercises2, exercises3]
 
   return (
     <>
       <Header course={course} />
-      {/*
       <Content 
         lessons={lessons}
         contents={contents}  
       />
-      */}
-      <Content lesson={part1} content={exercises1} />
-      <Content lesson={part2} content={exercises2} />
-      <Content lesson={part3} content={exercises3} />
       <Total exercises={[exercises1, exercises2, exercises3]} />
     </>
   );
