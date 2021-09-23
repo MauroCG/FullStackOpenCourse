@@ -2,7 +2,7 @@
 
 This repository contains my solutions to the different exercises of the **full stack open course 2021-2022** of the Helsinki university.
 
-The course can be found in the following [url](https://www.fullstackopen.com/).
+The course can be found in the following [url](https://www.fullstackopen.com/en/).
 
 For each part there's a folder that contains the respective projects.
 
