@@ -1,8 +1,28 @@
 import React, {useState} from 'react';
 
 const Button = ({text, handleClick}) => {
+  /* Component to create buttons with its respective text and onClick handler */
   return (
     <button onClick={handleClick}>{text}</button>
+  )
+}
+
+const Statistics = ({good, neutral, bad}) => {
+  /** Component to handle the display of the state variables and its statistics */
+  // calculing the statistics
+  const all = good + neutral + bad
+  const average = all !== 0? (good - bad)/all:0
+  const positive = all !== 0? good/all*100 + "%":0
+
+  return (
+    <div>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+      <p>all {all}</p>
+      <p>average {average}</p>
+      <p>positive {positive}</p>
+    </div>
   )
 }
 
@@ -32,9 +52,7 @@ const App = () => {
       <Button text='neutral' handleClick={handleSetNeutral} />
       <Button text='bad' handleClick={handleSetBad} />
       <h2>statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </>
   );
 }
