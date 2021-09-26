@@ -2,13 +2,25 @@ import React, {useState} from 'react';
 
 const Button = ({text, handleClick}) => {
   /* Component to create buttons with its respective text and onClick handler */
+  
   return (
     <button onClick={handleClick}>{text}</button>
   )
 }
 
+const StatisticLine = ({text, value}) => {
+  /** Component to show the individual statistics */
+
+  return (
+    <div>
+      {text} {value}
+    </div>
+  )
+}
+
 const Statistics = ({good, neutral, bad}) => {
   /** Component to handle the display of the state variables and its statistics */
+
   // calculing the statistics of feedback to be displayed
   const all = good + neutral + bad
   const average = all !== 0? (good - bad)/all:0
@@ -25,12 +37,12 @@ const Statistics = ({good, neutral, bad}) => {
 
   return (
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average}</p>
-      <p>positive {positive}</p>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={all} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={positive} />
     </div>
   )
 }
