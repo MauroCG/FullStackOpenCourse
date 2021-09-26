@@ -14,6 +14,15 @@ const Statistics = ({good, neutral, bad}) => {
   const average = all !== 0? (good - bad)/all:0
   const positive = all !== 0? good/all*100 + "%":0
 
+  // adding conditional rendering to only display the statistics when there are feedback interactions
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+  }
+
   return (
     <div>
       <p>good {good}</p>
