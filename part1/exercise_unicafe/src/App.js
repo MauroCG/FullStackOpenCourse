@@ -9,7 +9,7 @@ const Button = ({text, handleClick}) => {
 
 const Statistics = ({good, neutral, bad}) => {
   /** Component to handle the display of the state variables and its statistics */
-  // calculing the statistics
+  // calculing the statistics of feedback to be displayed
   const all = good + neutral + bad
   const average = all !== 0? (good - bad)/all:0
   const positive = all !== 0? good/all*100 + "%":0
