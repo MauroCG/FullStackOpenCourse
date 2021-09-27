@@ -1,5 +1,36 @@
 import React, { useState } from 'react'
 
+const Anecdote = ({title, anecdote, votes}) => {
+  return (
+    <div>
+      <h2>{title}</h2>
+      {anecdote}
+      <br />
+      has {votes} votes
+    </div>
+  )
+}
+
+const MostVotedAnecdote = ({anecdote, votes}) => {
+  if (votes === 0) {
+    return (
+      <Anecdote 
+        title="Anecdote with most votes (none)"
+        anecdote={anecdote}
+        votes={votes}
+      />
+    )
+  }
+
+  return (
+    <Anecdote
+      title="Anecdote with most votes"
+      anecdote={anecdote}
+      votes={votes}
+    />
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -24,22 +55,40 @@ const App = () => {
     ...Object.fromEntries(anecdotes.map(key => [key, 0])) // creates a object using anecdotes like keys and init all votes in 0
   })
 
-  // Function to handle the updating of votes
+  // Function to handle the updating of votes and most voted
   const handleSetVotes = () => {
-    setVotes({
+    setVotes({ // updating the votes
       ...votes,
       [anecdotes[selected]]: votes[anecdotes[selected]] + 1 // get the current anecdote displayed and update the vote
     })
+
+    if (votes[anecdotes[selected]] + 1 >= mostVoted.votes) { // updating the most voted anecdote
+      setMostVoted({
+        "anecdote": anecdotes[selected],
+        "votes": votes[anecdotes[selected]] + 1 // it is neccesary to add 1 because the votes aren't updated yet
+      })
+    }
   }
+
+  // States to carry out the most voted anecdote
+  const [mostVoted, setMostVoted] = useState({
+    "anecdote": anecdotes[selected],
+    "votes": 0
+  })
 
   return (
     <div>
-      {anecdotes[selected]}
-      <br />
-      has {votes[anecdotes[selected]]} votes
-      <br />
+      <Anecdote 
+        title="Anecdote of the day"
+        anecdote={anecdotes[selected]}
+        votes={votes[anecdotes[selected]]}
+      />
       <button onClick={handleSetVotes}>vote</button>
       <button onClick={handleRandomAnecdote}>next anecdote</button>
+      <MostVotedAnecdote
+        anecdote={mostVoted.anecdote}
+        votes={mostVoted.votes}
+      />
     </div>
   )
 }
