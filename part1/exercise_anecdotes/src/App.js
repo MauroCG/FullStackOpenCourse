@@ -11,16 +11,34 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
   ]
    
+  // States to handle the current anecdote to be displayed
   const [selected, setSelected] = useState(0)
 
+  // Function select randomly a anecdote of the list
   const handleRandomAnecdote = () => {
     setSelected(Math.floor(Math.random()*anecdotes.length))
+  }
+
+  // States to handle the votes for each anecdote
+  const [votes, setVotes] = useState({
+    ...Object.fromEntries(anecdotes.map(key => [key, 0])) // creates a object using anecdotes like keys and init all votes in 0
+  })
+
+  // Function to handle the updating of votes
+  const handleSetVotes = () => {
+    setVotes({
+      ...votes,
+      [anecdotes[selected]]: votes[anecdotes[selected]] + 1 // get the current anecdote displayed and update the vote
+    })
   }
 
   return (
     <div>
       {anecdotes[selected]}
       <br />
+      has {votes[anecdotes[selected]]} votes
+      <br />
+      <button onClick={handleSetVotes}>vote</button>
       <button onClick={handleRandomAnecdote}>next anecdote</button>
     </div>
   )
