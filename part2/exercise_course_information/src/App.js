@@ -1,3 +1,5 @@
+import Course from "./components/Course"
+
 const App = () => {
   const course = {
     id: 1,
@@ -21,7 +23,7 @@ const App = () => {
     ]
   }
 
-  return <Course course={course} /> // Define the respective modules or components
+  return <Course key={course.id} course={course} />
 }
 
 export default App
