@@ -44,7 +44,7 @@ const App = () => {
         />
       </div>
       <hr />
-      <Countries countries={countriesFiltered} />
+      <Countries countries={countriesFiltered} showCountry={setCountriesSearch} />
     </>
   );
 }

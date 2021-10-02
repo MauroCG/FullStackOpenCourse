@@ -1,6 +1,11 @@
 import Country from "./Country"
+import ShowCountry from "./ShowCountry"
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, showCountry }) => {
+    // Function to handle the button showCountry
+    const handleShowCountry = (event) => {
+        showCountry(event.target.value) // showCountry is the function to set the state of countriesSearch
+    }
     // Many countries to show
     if (countries.length > 10) {
         return <div>To many matches, specify another filter</div>
@@ -15,7 +20,14 @@ const Countries = ({ countries }) => {
     if (countries.length >= 2) {
         return (
             <>
-                {countries.map(country => <div key={country.alpha3Code}>{country.name}</div>)}
+                {countries.map(country => {
+                    return (
+                        <div key={country.alpha3Code} style={{display: "flex"}}>
+                            {country.name}
+                            <ShowCountry value={country.name} onClick={handleShowCountry} />
+                        </div>
+                    )
+                })}
             </>
         )
     }
