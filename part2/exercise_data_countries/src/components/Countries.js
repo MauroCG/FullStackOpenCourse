@@ -1,6 +1,7 @@
 import Country from "./Country"
 import ShowCountry from "./ShowCountry"
 
+
 const Countries = ({ countries, showCountry }) => {
     // Function to handle the button showCountry
     const handleShowCountry = (event) => {

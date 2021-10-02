@@ -2,6 +2,23 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Countries from './components/Countries'
 
+
+// DB countries manually created. Used in case of the api request fails
+const countriesDB = [
+  {
+    name:'United States of America',
+    capital:'New York',
+    alpha3Code: 'USA',
+    region: 'Americas'
+  },
+  {
+    name: 'Colombia',
+    capital:'Bogotá',
+    alpha3Code: 'COL',
+    region: 'Americas'
+  }
+]
+
 const App = () => {
   // State for countries
   const [countries, setCountries] = useState([])
@@ -14,7 +31,10 @@ const App = () => {
     axios
       .get(`http://api.countrylayer.com/v2/all?access_key=${API_KEY}`)
       .then(response => setCountries(response.data))
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log(error)
+        setCountries(countriesDB)
+      })
   }, [])
 
   // Function to handle the change of the countriesSearch
