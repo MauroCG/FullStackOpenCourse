@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personsService from './services/persons'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+
 
 const App = () => {
   // State variable to show the persons saved in the phonebook
@@ -10,11 +11,11 @@ const App = () => {
 
   // Getting the initial data of the phonebook from the server
   useEffect(() => {
-    console.log("Getting the phonebook data")
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    //console.log("Getting the phonebook data")
+    personsService
+      .getAll()
+      .then(personsData => {
+        setPersons(personsData)
       })
   }, [])
 
@@ -54,9 +55,8 @@ const App = () => {
       alert(`${newPerson.number} is already added to phonebook`)
     }
     else { // If the name and number doesn't exists yet agregates the person and clears the inputs
-      axios
-        .post('http://localhost:3001/persons', newPerson)
-        .then(response => response.data)
+      personsService
+        .addPerson(newPerson)
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson))
           setNewName('')
