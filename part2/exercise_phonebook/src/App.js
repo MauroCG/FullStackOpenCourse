@@ -54,9 +54,15 @@ const App = () => {
       alert(`${newPerson.number} is already added to phonebook`)
     }
     else { // If the name and number doesn't exists yet agregates the person and clears the inputs
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(response => response.data)
+        .then(addedPerson => {
+          setPersons(persons.concat(addedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => console.log('Failling to save the new person information'))
     }
   }
 
