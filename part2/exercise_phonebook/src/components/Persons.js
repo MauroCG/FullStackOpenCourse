@@ -1,19 +1,43 @@
 import Person from "./Person"
 import personsService from '../services/persons'
 
-const Persons = ({ persons, setPersons }) => {
+const Persons = ({ persons, setPersons, setNotificationMessage }) => {
     //Function to handle the deletion of the person and update the state
     const onDeletePerson = personId => {
+        const personDeleted = persons.find(person => person.id === personId)
+
         personsService
             .deletePerson(personId) //Deleting the person
             .then(response => {
+                setNotificationMessage({
+                    type: 'success',
+                    message: `${personDeleted.name} deleted successfully`
+                })
+                setTimeout(() => {
+                    setNotificationMessage({type: null, message: null})
+                }, 5000)
+
                 personsService
                     .getAll() //Updating the persons state
                     .then(personsData => {
                         setPersons(personsData)
                     })
             })
-            .catch("Can't felete the specified person")
+            .catch(error => {
+                setNotificationMessage({
+                    type: 'error',
+                    message: `Information of ${personDeleted.name} was alreeady been removed from server`
+                })
+                setTimeout(() => {
+                    setNotificationMessage({type: null, message: null})
+                }, 5000)
+
+                personsService
+                    .getAll() //Updating the persons state
+                    .then(personsData => {
+                        setPersons(personsData)
+                    })
+            })
     }
 
     return (

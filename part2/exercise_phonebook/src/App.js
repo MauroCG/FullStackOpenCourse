@@ -3,6 +3,7 @@ import personsService from './services/persons'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -24,6 +25,9 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
   const [ showSearch, setShowSearch ] = useState(false)
+
+  // State variable to handle the shown of notifications
+  const [ notificationMessage, setNotificationMessage ] = useState({type: null, message: null})
 
   const handleChangeNewName = (event) => { // Updates newName
     setNewName(event.target.value)
@@ -58,10 +62,25 @@ const App = () => {
         personsService
           .updatePerson(oldPerson.id, newPerson)
           .then(updatedPerson => {
+            setNotificationMessage({
+              type: 'success',
+              message: `The number of ${updatedPerson.name} was updated successfully`
+            })
+            setTimeout(() => {
+              setNotificationMessage({type: null, message: null})
+            }, 5000)
+
             setPersons(persons.map(person => person.name !== updatedPerson.name ? person : updatedPerson))
           })
           .catch(error => {
-            alert(`${newPerson.name} was aleready deleted from server`)
+            setNotificationMessage({
+              type: 'error',
+              message: `Information of ${newPerson.name} was aleready deleted from server`
+            })
+            setTimeout(() => {
+              setNotificationMessage({type: null, message: null})
+            }, 5000)
+
             setPersons(persons.filter(person => person.name !== newPerson.name))
           })
       }
@@ -72,6 +91,14 @@ const App = () => {
       personsService
         .addPerson(newPerson)
         .then(addedPerson => {
+          setNotificationMessage({
+            type: 'success',
+            message: `Added ${addedPerson.name}`
+          })
+          setTimeout(() => {
+            setNotificationMessage({type: null, message: null})
+          }, 5000)
+
           setPersons(persons.concat(addedPerson))
           setNewName('')
           setNewNumber('')
@@ -88,6 +115,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+        <Notification className={notificationMessage.type} message={notificationMessage.message} />
         <Filter 
           text={"filter shown with"}
           value={search}
@@ -101,7 +129,7 @@ const App = () => {
         onSubmit={addPerson}
       />
       <h3>Numbers</h3>
-        <Persons persons={personsToShow} setPersons={setPersons} />
+        <Persons persons={personsToShow} setPersons={setPersons} setNotificationMessage={setNotificationMessage} />
     </div>
   )
 }
