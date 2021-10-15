@@ -29,6 +29,19 @@ let persons = [ // Hardcoded data
 ];
 
 
+const generateId = () => {
+    let id = Math.floor(Math.random() * 10000) // Creates a new random id
+
+    // Verify that the id doesn't match any one
+    ids = persons.map(p => p.id)
+    while (id in ids) {
+        id = Math.floor(Math.random() * 10000)
+    }
+
+    return id
+}
+
+
 app.get('/api/persons', (request, response) => { // Get all the data
     response.json(persons)
 });
@@ -66,6 +79,35 @@ app.delete('/api/persons/:id', (request, response) => { // Deletes the informati
 
     response.status(204).end()
 
+})
+
+app.post('/api/persons', (request, response) => { // Saves information of a single person to the phonebook
+    const newId = generateId() // Generates a new id
+
+    if (!request.body.name || !request.body.number) { // Error handling for missing information
+        return response.status(400).json({
+            error: "Name or number are missing, please supply required information"
+        })
+    }
+
+    if (persons.map(p => p.name).includes(request.body.name)) { // Error handling for given a repeated name
+        return response.status(400).json({
+            error: "The name must be unique"
+        })
+    }
+    /*persons.map(p => {
+        console.log(p.name, typeof p.name, typeof request.body.name)
+    })*/
+
+    const person = { // Creates a new person
+        id: newId,
+        name: request.body.name,
+        number: request.body.number
+    }
+    //console.log(person)
+    persons = persons.concat(person) // Adds the new person to the phonebook
+
+    response.json(person)
 })
 
 
