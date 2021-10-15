@@ -1,3 +1,4 @@
+const { request } = require("express");
 const express = require("express");
 
 const app = express();
@@ -31,6 +32,15 @@ const persons = [ // Hardcoded data
 app.get('/api/persons', (request, response) => { // GET all the data
     response.json(persons)
 });
+
+app.get('/info', (request, response) => {
+    const current_time = new Date()
+    response.send(`
+        Phonebook has infor for ${persons.length} people
+        <br></br>
+        ${current_time}
+    `)
+})
 
 
 const PORT = 3001;
