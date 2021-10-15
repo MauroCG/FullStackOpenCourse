@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json()); // Puts the content in property body of the request
 
-const persons = [ // Hardcoded data
+let persons = [ // Hardcoded data
   {
     id: 1,
     name: "Arto Hellas",
@@ -50,8 +50,22 @@ app.get('/api/persons/:id', (request, response) => { // Geit information of a si
         response.json(person)
     } else {
         response.statusMessage = `The id ${id} hasn't found for any person in the phonebook`
-        response.status(400).end()
+        response.status(404).end()
     }
+})
+
+app.delete('/api/persons/:id', (request, response) => { // Deletes the information of a single person
+    const id = Number(request.params.id)
+
+    if (id in persons.map(p => p.id)) {
+        persons = persons.filter(p => p.id !== id)
+        response.statusMessage = `The person with id ${id} was deleted successfully`
+    } else {
+        response.statusMessage = `The id ${id} hasn't found for any person in the phonebook`
+    }
+
+    response.status(204).end()
+
 })
 
 
