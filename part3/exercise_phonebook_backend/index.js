@@ -1,4 +1,4 @@
-const { request } = require("express");
+const { request, response } = require("express");
 const express = require("express");
 
 const app = express();
@@ -29,17 +29,29 @@ const persons = [ // Hardcoded data
 ];
 
 
-app.get('/api/persons', (request, response) => { // GET all the data
+app.get('/api/persons', (request, response) => { // Get all the data
     response.json(persons)
 });
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response) => { // Get info of the phonebook
     const current_time = new Date()
     response.send(`
         Phonebook has infor for ${persons.length} people
         <br></br>
         ${current_time}
     `)
+})
+
+app.get('/api/persons/:id', (request, response) => { // Geit information of a single person
+    const id = Number(request.params.id)
+    const person = persons.find(p => p.id === id)
+
+    if (person) {
+        response.json(person)
+    } else {
+        response.statusMessage = `The id ${id} hasn't found for any person in the phonebook`
+        response.status(400).end()
+    }
 })
 
 
