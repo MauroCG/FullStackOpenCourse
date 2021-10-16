@@ -5,7 +5,22 @@ const morgan = require('morgan') // The morgan middleware to logging
 const app = express();
 
 app.use(express.json()); // Puts the content in property body of the request
-app.use(morgan('tiny')); // Predefined string format tiny for logging
+
+// Personalized function to use logging with morgan
+morgan.token('body', function (req, res) { return JSON.stringify(req.body) }) // Custom token to return the body
+
+const customLogging = (tokens, req, res) => {
+    return [
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms',
+        // If method is POST
+        tokens.method(req, res) === 'POST' ? tokens.body(req, res) : ''
+    ].join(' ')
+}
+app.use(morgan(!customLogging ? 'tiny' : customLogging))
 
 let persons = [ // Hardcoded data
   {
