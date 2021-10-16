@@ -1,9 +1,11 @@
 const { request, response } = require("express");
 const express = require("express");
+const morgan = require('morgan') // The morgan middleware to logging
 
 const app = express();
 
 app.use(express.json()); // Puts the content in property body of the request
+app.use(morgan('tiny')); // Predefined string format tiny for logging
 
 let persons = [ // Hardcoded data
   {
