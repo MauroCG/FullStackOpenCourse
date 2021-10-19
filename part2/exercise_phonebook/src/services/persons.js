@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/api/persons'
+const baseUrl = 'https://sheltered-peak-20979.herokuapp.com/api/persons'
 
 const getAll = () => {
     //console.log('Fetching all data')
