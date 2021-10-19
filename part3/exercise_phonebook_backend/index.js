@@ -1,10 +1,12 @@
 const { request, response } = require("express");
 const express = require("express");
+const cors = require('cors');
 const morgan = require('morgan') // The morgan middleware to logging
 
 const app = express();
 
 app.use(express.json()); // Puts the content in property body of the request
+app.use(cors())
 
 // Personalized function to use logging with morgan
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) }) // Custom token to return the body
@@ -20,7 +22,7 @@ const customLogging = (tokens, req, res) => {
         tokens.method(req, res) === 'POST' ? tokens.body(req, res) : ''
     ].join(' ')
 }
-app.use(morgan(!customLogging ? 'tiny' : customLogging))
+app.use(morgan(customLogging))
 
 let persons = [ // Hardcoded data
   {
@@ -66,7 +68,7 @@ app.get('/api/persons', (request, response) => { // Get all the data
 app.get('/info', (request, response) => { // Get info of the phonebook
     const current_time = new Date()
     response.send(`
-        Phonebook has infor for ${persons.length} people
+        Phonebook has info for ${persons.length} people
         <br></br>
         ${current_time}
     `)
@@ -86,8 +88,10 @@ app.get('/api/persons/:id', (request, response) => { // Geit information of a si
 
 app.delete('/api/persons/:id', (request, response) => { // Deletes the information of a single person
     const id = Number(request.params.id)
+    //console.log(id, persons.map(p => p.id).includes(id))
 
-    if (id in persons.map(p => p.id)) {
+    if (persons.map(p => p.id).includes(id)) {
+        //console.log(`Deleting the person with the id ${id}`)
         persons = persons.filter(p => p.id !== id)
         response.statusMessage = `The person with id ${id} was deleted successfully`
     } else {
@@ -123,6 +127,7 @@ app.post('/api/persons', (request, response) => { // Saves information of a sing
     }
     //console.log(person)
     persons = persons.concat(person) // Adds the new person to the phonebook
+
 
     response.json(person)
 })
