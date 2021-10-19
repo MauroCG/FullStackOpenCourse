@@ -7,6 +7,7 @@ const app = express();
 
 app.use(express.json()); // Puts the content in property body of the request
 app.use(cors())
+//app.use(express.static('build'))
 
 // Personalized function to use logging with morgan
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) }) // Custom token to return the body
