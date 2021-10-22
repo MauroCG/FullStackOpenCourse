@@ -1,7 +1,9 @@
+require('dotenv').config()
 const { request, response } = require("express");
 const express = require("express");
 const cors = require('cors');
 const morgan = require('morgan') // The morgan middleware to logging
+const Person = require('./models/person') // Person model from MongoDB
 
 const app = express();
 
@@ -63,7 +65,9 @@ const generateId = () => {
 
 
 app.get('/api/persons', (request, response) => { // Get all the data
-    response.json(persons)
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
 });
 
 app.get('/info', (request, response) => { // Get info of the phonebook
