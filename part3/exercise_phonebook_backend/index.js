@@ -29,27 +29,61 @@ app.use(morgan(customLogging))
 
 
 
+app.get('/info', (request, response) => {
+    const current_time = new Date()
+
+    Person.count({})
+        .then(count => {
+            response.send(`
+                <p>The phonebook has data of ${count} people</p>
+                <p>${current_time}</p>
+            `)
+        })
+})
+
 app.get('/api/persons', (request, response) => { // Get all the data
     Person.find({}).then(persons => {
         response.json(persons)
     })
 });
 
-app.get('/api/persons/:id', (request, response) => { // Geit information of a single person
-    Person.findById({ _id: request.params.id }).then(result => {
-        response.json(result)
+app.get('/api/persons/:id', (request, response, next) => { // Get information of a single person
+    Person.findById(request.params.id).then(result => {
+        if (result) {
+            response.json(result)
+        } else {
+            response.status(404).end()
+        }
+    })
+    .catch(error => next(error))
+})
+
+app.delete('/api/persons/:id', (request, response, next) => { // Deletes the information of a single person
+    Person.findByIdAndDelete(request.params.id).then(result => {
+        //console.log(result)
+        response.status(204).end()
     })
     .catch(error => {
-        response.statusMessage = "Person hasn't found in the phonebook"
-        response.status(404).end()
+        next(error)
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => { // Deletes the information of a single person
-    Person.findByIdAndDelete({ _id: request.params.id }).then(result => {
-        console.log(result)
-        response.status(204).end()
-    })
+app.put('/api/persons/:id', (request, response, next) => { // Mdify the number of a existing person entry
+    const body = request.body
+
+    const person = {
+        name: body.name,
+        number: body.number,
+    }
+
+    //console.log(request.params.id, person)
+
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(updatedPerson => {
+            //console.log('Person data updated')
+            response.json(updatedPerson)
+        })
+        .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => { // Saves information of a single person to the phonebook
@@ -78,6 +112,28 @@ app.post('/api/persons', (request, response) => { // Saves information of a sing
         response.json(addedPerson)
     })
 })
+
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// handler of requests with result to errors
+app.use(errorHandler)
+
 
 
 const PORT = process.env.PORT || 3001;
