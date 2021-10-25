@@ -86,31 +86,17 @@ app.put('/api/persons/:id', (request, response, next) => { // Mdify the number o
         .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => { // Saves information of a single person to the phonebook
-    if (!request.body.name || !request.body.number) { // Error handling for missing information
-        return response.status(400).json({
-            error: "Name or number are missing, please supply required information"
-        })
-    }
-
-    Person.find({ name: request.body.name }).then(result => { // Error handling for given a repeated name
-        if (result.length > 0) {
-            return response.status(400).json({
-                error: 'The name mut be unique'
-            })
-        }
-    })
-
-    console.log('Creating the person')
+app.post('/api/persons', (request, response, next) => { // Saves information of a single person to the phonebook
     const person = Person({ // Creates a new person
         name: request.body.name,
         number: request.body.number
     })
 
-    console.log('Saving the person to the DB')
-    person.save().then(addedPerson => {
-        response.json(addedPerson)
-    })
+    person.save()
+        .then(addedPerson => {
+            response.json(addedPerson)
+        })
+        .catch(error => next(error))
 })
 
 
@@ -122,11 +108,19 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-  console.log(error.message)
+  console.log(error.name)
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  }
+
+  if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
+  }
+
+  if (error.name === 'MongoServerError') {
+      return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }
