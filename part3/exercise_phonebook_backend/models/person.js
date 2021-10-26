@@ -3,17 +3,29 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const url = process.env.MONGODB_URI
 
+// Regular expression to check if the number string contains least 8 digits
+const regMinDigits = /^(?=(.*\d){8})[-()+\d]{8,}$/
+
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
     unique: true,
+    minlength: 3,
     required: true
   },
   number: {
     type: String,
-    required: true
+    minlength: 8,
+    required: true,
+    validate: {
+      validator: function(val) {
+        //console.log(val, regMinDigits.test(val))
+        return regMinDigits.test(val)
+      },
+      message: val => `The number must contain at least 8 digits (the given number ${val.value} is not valid)`
+    }
   },
 })
 

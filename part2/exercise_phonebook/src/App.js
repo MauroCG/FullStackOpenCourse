@@ -73,15 +73,20 @@ const App = () => {
             setPersons(persons.map(person => person.name !== updatedPerson.name ? person : updatedPerson))
           })
           .catch(error => {
+            const index = error.response.data.error.indexOf("`") // Get the correspond index to show a better error message than the backend sends
             setNotificationMessage({
               type: 'error',
-              message: `Information of ${newPerson.name} was aleready deleted from server`
+              message: error.response.data.error.slice(index)
             })
             setTimeout(() => {
               setNotificationMessage({type: null, message: null})
             }, 5000)
 
-            setPersons(persons.filter(person => person.name !== newPerson.name))
+            personsService
+              .getAll()
+              .then(personsData => {
+                setPersons(personsData)
+              })
           })
       }
     } else if (alreadyAddedNumber) {
@@ -103,7 +108,17 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
-        .catch(error => console.log('Failling to save the new person information'))
+        .catch(error => {
+          //console.log(error.response.data.error)
+            const index = error.response.data.error.indexOf("`") // Get the correspond index to show a better error message than the backend sends
+            setNotificationMessage({
+              type: 'error',
+              message: error.response.data.error.slice(index)
+            })
+            setTimeout(() => {
+              setNotificationMessage({type: null, message: null})
+            }, 5000)
+        })
     }
   }
 

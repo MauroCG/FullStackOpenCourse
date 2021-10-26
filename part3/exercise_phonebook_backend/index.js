@@ -78,7 +78,7 @@ app.put('/api/persons/:id', (request, response, next) => { // Mdify the number o
 
     //console.log(request.params.id, person)
 
-    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true })
         .then(updatedPerson => {
             //console.log('Person data updated')
             response.json(updatedPerson)
