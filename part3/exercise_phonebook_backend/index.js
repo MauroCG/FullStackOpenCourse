@@ -5,7 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan') // The morgan middleware to logging
 const Person = require('./models/person') // Person model from MongoDB
 
-const app = express();
+const app = express()
 
 app.use(express.json()); // Puts the content in property body of the request
 app.use(cors())
