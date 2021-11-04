@@ -1,7 +1,31 @@
 const listHelper = require('../utils/list_helper')
 
-describe('most blogs', () => {
+describe('most likes', () => {
   const blogs = [
+    {
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      __v: 0
+    },
+    {
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      __v: 0
+    },
+    {
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      __v: 0
+    },
     {
       _id: '5a422a851b54a676234d17f7',
       title: 'React patterns',
@@ -77,13 +101,13 @@ describe('most blogs', () => {
   ]
 
   const correct_result = {
-    author: 'Robert C. Martin',
-    blogs: 4
+    author: 'Michael Chan',
+    likes: 35
   }
 
 
-  test('should be Robert C. Martin with 4', () => {
-    const result = listHelper.mostBlogs(blogs)
+  test('should be Michael Chan with 35', () => {
+    const result = listHelper.mostLikes(blogs)
     expect(result).toEqual(correct_result)
   })
 })
